@@ -1,11 +1,12 @@
+
 import os
 from dotenv import load_dotenv
 import requests
 
 load_dotenv()
-API_KEY = "fde54e9c463f4b81ab76f82be0540a14"
+API_KEY = os.getenv("RAWG_API_KEY")
 
-BAZA_URL = "https://api.rawg.io/api/games"  
+BAZA_URL = "https://api.rawg.io/api/games"
 
 params = {"key": API_KEY, "genres": 4, "page_size": 5}
 
@@ -35,5 +36,5 @@ for game in games:
     stores = stores_resp.json().get("results", [])
     print("Где купить:")
     for store in stores:
-            url = store.get("url")
-            print(url)
+        url = store.get("url")
+        print(url)
