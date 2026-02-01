@@ -14,7 +14,7 @@ pip install -r requirements.txt
 - Создайте в корне проекта файл .env и добавьте в него строку:
 
 RAWG_API_KEY=ваш_ключ_здесь
-Пример содержимого файла .env:
+- Пример содержимого файла .env:
 
 RAWG_API_KEY=fde54e9c463f4b81ab76f82be0540a14
 
