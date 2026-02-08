@@ -1,21 +1,21 @@
-
 import os
 from dotenv import load_dotenv
 import requests
 
 load_dotenv()
 API_KEY = os.getenv("RAWG_API_KEY")
-
 BAZA_URL = "https://api.rawg.io/api/games"
 
-params = {"key": API_KEY, "genres": 4, "page_size": 5}
-
-try:
+def get_games(genre_id, page_size):
+    params = {"key": API_KEY, "genres": genre_id, "page_size": page_size}
     response = requests.get(BAZA_URL, params=params)
     response.raise_for_status()
-    games = response.json().get("results", [])
+    return response.json().get("results", [])
+
+try:
+    games = get_games(4, 5)
 except requests.RequestException as err:
-    print(f"ошибка cписка игр: {err}")
+    print(f"ошибка списка игр: {err}")
     exit()
 
 for game in games:
@@ -38,3 +38,4 @@ for game in games:
     for store in stores:
         url = store.get("url")
         print(url)
+
