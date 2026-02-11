@@ -2,18 +2,15 @@ import os
 from dotenv import load_dotenv
 import requests
 
-
 load_dotenv()
 API_KEY = os.getenv("RAWG_API_KEY")
 BAZA_URL = "https://api.rawg.io/api/games"
-
 
 def get_games(genre_id, page_size):
     params = {"key": API_KEY, "genres": genre_id, "page_size": page_size}
     response = requests.get(BAZA_URL, params=params)
     response.raise_for_status()
     return response.json().get("results", [])
-    
 
 def games(games_list):
     for game in games_list:
@@ -36,7 +33,6 @@ def games(games_list):
         for store in stores:
             url = store.get("url")
             print(url)
-            
 
 def main():
     try:
