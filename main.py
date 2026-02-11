@@ -2,40 +2,51 @@ import os
 from dotenv import load_dotenv
 import requests
 
+
 load_dotenv()
 API_KEY = os.getenv("RAWG_API_KEY")
 BAZA_URL = "https://api.rawg.io/api/games"
+
 
 def get_games(genre_id, page_size):
     params = {"key": API_KEY, "genres": genre_id, "page_size": page_size}
     response = requests.get(BAZA_URL, params=params)
     response.raise_for_status()
     return response.json().get("results", [])
-
-try:
-    games = get_games(4, 5)
-except requests.RequestException as err:
-    print(f"ошибка списка игр: {err}")
-    exit()
-
-for game in games:
-    game_id = game.get("id")
-    game_name = game.get("name")
-    slug = game.get("slug")
-    released = game.get("released")
-
-    print(f"\n{game_name} ({released})")
-    print(f"https://rawg.io/games/{slug}")
-
-    ss_resp = requests.get(f"{BAZA_URL}/{game_id}/screenshots", params={"key": API_KEY})
-    ss_resp.raise_for_status()
-    screenshots = ss_resp.json().get("results", [])
     
-    stores_resp = requests.get(f"{BAZA_URL}/{game_id}/stores", params={"key": API_KEY})
-    stores_resp.raise_for_status()
-    stores = stores_resp.json().get("results", [])
-    print("Где купить:")
-    for store in stores:
-        url = store.get("url")
-        print(url)
+
+def games(games_list):
+    for game in games_list:
+        game_id = game.get("id")
+        game_name = game.get("name")
+        slug = game.get("slug")
+        released = game.get("released")
+
+        print(f"\n{game_name} ({released})")
+        print(f"https://rawg.io/games/{slug}")
+
+        ss_resp = requests.get(f"{BAZA_URL}/{game_id}/screenshots", params={"key": API_KEY})
+        ss_resp.raise_for_status()
+        screenshots = ss_resp.json().get("results", [])
+        
+        stores_resp = requests.get(f"{BAZA_URL}/{game_id}/stores", params={"key": API_KEY})
+        stores_resp.raise_for_status()
+        stores = stores_resp.json().get("results", [])
+        print("Где купить:")
+        for store in stores:
+            url = store.get("url")
+            print(url)
+            
+
+def main():
+    try:
+        games_list = get_games(4, 5)
+        games(games_list)
+    except requests.RequestException as err:
+        print(f"ошибка списка игр: {err}")
+        exit()
+
+if __name__ == '__main__':
+    main()
+
 
